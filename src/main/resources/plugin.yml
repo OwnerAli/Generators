@@ -1,0 +1,5 @@
+name: Generators
+version: '${project.version}'
+main: me.ogali.generators.GeneratorsPlugin
+api-version: '1.20'
+authors: [xxAli]
