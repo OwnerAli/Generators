@@ -2,7 +2,6 @@ package me.ogali.generators.registries;
 
 import me.ogali.generators.domain.AbstractGenerator;
 import me.ogali.generators.domain.impl.PlaceableAbstractGenerator;
-import me.ogali.generators.utils.Chat;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -54,7 +53,7 @@ public class GeneratorRegistry {
         return Optional.empty();
     }
 
-    public List<String> getGeneratorIdList() {
+    public List<String> getRegisteredIdList() {
         return generatorMap.values()
                 .stream()
                 .map(AbstractGenerator::getId)

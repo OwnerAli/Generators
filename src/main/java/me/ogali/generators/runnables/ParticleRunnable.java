@@ -1,6 +1,7 @@
 package me.ogali.generators.runnables;
 
 import me.ogali.generators.GeneratorsPlugin;
+import me.ogali.generators.utils.LocationUtils;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -21,7 +22,7 @@ public class ParticleRunnable extends BukkitRunnable {
 
     @Override
     public void run() {
-        location.getWorld().spawnParticle(particle, location.clone().add(0, 1, 0), 10);
+        location.getWorld().spawnParticle(particle, LocationUtils.getRandomLocationOnBlock(location), 10);
     }
 
 }

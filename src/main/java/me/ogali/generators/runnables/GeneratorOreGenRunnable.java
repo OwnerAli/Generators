@@ -1,10 +1,7 @@
 package me.ogali.generators.runnables;
 
 import me.ogali.generators.GeneratorsPlugin;
-import me.ogali.generators.domain.AbstractGenerator;
 import me.ogali.generators.domain.impl.PlaceableAbstractGenerator;
-import me.ogali.generators.ore.PlacedGenOre;
-import me.ogali.generators.utils.Chat;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class GeneratorOreGenRunnable extends BukkitRunnable {

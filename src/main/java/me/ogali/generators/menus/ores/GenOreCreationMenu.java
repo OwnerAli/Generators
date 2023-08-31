@@ -1,19 +1,19 @@
-package me.ogali.generators.menus;
+package me.ogali.generators.menus.ores;
 
 import com.github.stefvanschie.inventoryframework.gui.type.DispenserGui;
 import me.ogali.generators.GeneratorsPlugin;
-import me.ogali.generators.domain.impl.impl.PlaceableBlockGenerator;
+import me.ogali.generators.ore.domain.AbstractGenOre;
 import me.ogali.generators.utils.Chat;
 import me.ogali.generators.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class GeneratorCreationMenu {
+public class GenOreCreationMenu {
 
     private ItemStack lastItem;
 
-    public void show(Player player, PlaceableBlockGenerator placeableBlockGenerator) {
+    public void show(Player player, AbstractGenOre abstractGenOre) {
         DispenserGui gui = new DispenserGui(Chat.colorize("&8&lInsert Generator Item Below"));
         gui.setOnGlobalClick(click -> {
             click.setCancelled(true);
@@ -21,8 +21,8 @@ public class GeneratorCreationMenu {
             if (click.getClickedInventory() == click.getView().getTopInventory()) {
                 ItemStack item = click.getInventory().getItem(4);
                 if (item != null && item.getType() != Material.GRAY_STAINED_GLASS_PANE && item.getType() != Material.AIR) {
-                    placeableBlockGenerator.setItemStack(item);
-                    GeneratorsPlugin.getInstance().getGeneratorRegistry().registerGenerator(placeableBlockGenerator);
+                    abstractGenOre.setDisplayItem(item);
+                    GeneratorsPlugin.getInstance().getGenOreRegistry().registerGenOre(abstractGenOre);
                     player.closeInventory();
                     return;
                 }

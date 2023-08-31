@@ -15,8 +15,8 @@ public abstract class PlaceableAbstractGenerator extends AbstractGenerator imple
     @Setter
     private Location placedLocation;
 
-    public PlaceableAbstractGenerator(String id, long genSpeedInSeconds, Range range, Particle particle) {
-        super(id, genSpeedInSeconds, range, particle);
+    public PlaceableAbstractGenerator(String id, long genSpeedInSeconds, Material generatableMaterial, Range range, Particle particle) {
+        super(id, genSpeedInSeconds, generatableMaterial, range, particle);
     }
 
 }

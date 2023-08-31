@@ -9,6 +9,7 @@ import me.ogali.generators.runnables.GeneratorOreGenRunnable;
 import me.ogali.generators.runnables.ParticleRunnable;
 import me.ogali.generators.utils.Chat;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -16,21 +17,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-
 @Getter
 @Setter
 public class PlaceableBlockGenerator extends PlaceableAbstractGenerator {
 
     private ItemStack itemStack;
 
-    public PlaceableBlockGenerator(String id, long genSpeedInSeconds, Range range, Particle particle) {
-        super(id, genSpeedInSeconds, range, particle);
+    public PlaceableBlockGenerator(String id, long genSpeedInSeconds, Material generatableMaterial, Range range, Particle particle) {
+        super(id, genSpeedInSeconds, generatableMaterial, range, particle);
     }
 
     public PlaceableBlockGenerator(PlaceableAbstractGenerator placeableGenerator) {
-        super(placeableGenerator.getId(), placeableGenerator.getGenSpeedInSeconds(), placeableGenerator.getRange(),
-                placeableGenerator.getParticle());
+        super(placeableGenerator.getId(), placeableGenerator.getGenSpeedInSeconds(), placeableGenerator.getGeneratableMaterial(),
+                placeableGenerator.getRange(), placeableGenerator.getParticle());
     }
 
     public ItemStack getItem() {
