@@ -8,7 +8,7 @@ import java.util.Random;
 public class LocationUtils {
 
     public static Location getRandomLocationOnBlock(Location blockLocation) {
-        return getRandomLocationWithinDesiredRange(-1, 1, blockLocation);
+        return getRandomLocationWithinDesiredRange(-0.1, 0.1, blockLocation);
     }
 
     public static Location getRandomLocationWithinDesiredRange(double minRange, double maxRange, Location location) {

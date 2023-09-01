@@ -23,13 +23,14 @@ public class AdminCommands extends BaseCommand {
     private final GeneratorsPlugin generatorsPlugin;
 
     @Subcommand("create")
-    @Syntax("<id> <gen speed in seconds> <generatable material> <x range> <y range> <z range> <particle>")
-    public void onGeneratorCreate(Player player, String id, long genSpeedInSeconds, Material generatableMaterial, int xRange, int yRange, int zRange, Particle particle) {
+    @Syntax("<id> <gen speed in seconds> <generatable material> <x range> <y range> <z range> <include corners> <particle>")
+    public void onGeneratorCreate(Player player, String id, long genSpeedInSeconds, Material generatableMaterial, int xRange, int yRange, int zRange,
+                                  boolean includeCorners, Particle particle) {
         generatorsPlugin.getGeneratorRegistry()
                 .getGeneratorById(id)
                 .ifPresentOrElse(abstractGenerator -> Chat.tellFormatted(player, "&cGenerator with id: %s, already exists!", id),
                         () -> new GeneratorCreationMenu().show(player, new PlaceableBlockGenerator(id, genSpeedInSeconds,
-                                generatableMaterial, new Range(xRange, yRange, zRange), particle)));
+                                generatableMaterial, new Range(xRange, yRange, zRange, includeCorners), particle)));
     }
 
     @Subcommand("get")

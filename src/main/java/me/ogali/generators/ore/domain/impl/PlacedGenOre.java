@@ -32,19 +32,22 @@ public class PlacedGenOre extends AbstractGenOre {
 
     @Override
     public void mine(Player player, AbstractGenerator abstractGenerator) {
-        if (oreAmount - 1 == -1) {
-            if (!player.isSneaking()) return;
-            player.getInventory().addItem(getItem());
-            location.getBlock().setType(Material.AIR);
-            abstractGenerator.getApplicableOreList().remove(this);
-            return;
+        synchronized (abstractGenerator.getApplicableOreList()) {
+            if (oreAmount - 1 == -1) {
+                if (!player.isSneaking()) return;
+                player.getInventory().addItem(getItem());
+                location.getBlock().setType(Material.AIR);
+                abstractGenerator.getApplicableOreList().remove(this);
+                return;
+            }
+            oreAmount--;
+            if (oreAmount < 5) {
+                location.getBlock().setType(getDisplayItem().getType());
+            }
+            player.getInventory().addItem(new ItemStack(abstractGenerator.getGeneratableMaterial(), oreAmount));
         }
-        oreAmount--;
-        if (oreAmount < 5) {
-            location.getBlock().setType(getDisplayItem().getType());
-        }
-        player.getInventory().addItem(new ItemStack(abstractGenerator.getGeneratableMaterial(), oreAmount));
     }
+
 
     @Override
     public void generate(Material material) {

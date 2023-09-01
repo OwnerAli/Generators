@@ -5,6 +5,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import java.util.Objects;
+
 public class BlockBreakListener implements Listener {
 
     private final GeneratorsPlugin generatorsPlugin;
@@ -17,6 +19,7 @@ public class BlockBreakListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         generatorsPlugin.getGeneratorRegistry().getNearestGenerator(event.getBlock().getLocation())
                 .ifPresent(generator -> generator.getApplicableOreList().stream()
+                        .filter(Objects::nonNull)
                         .filter(genOre -> genOre.getLocation() != null)
                         .filter(genOre -> event.getBlock().getLocation().equals(genOre.getLocation()))
                         .forEach(genOre -> {

@@ -50,7 +50,7 @@ public class PlaceableBlockGenerator extends PlaceableAbstractGenerator {
         GeneratorsPlugin.getInstance().getGeneratorRegistry()
                 .registerPlaceableGenerator(placeableAbstractGenerator);
         Chat.tell(player, "&aGenerator placed!");
-        new ParticleRunnable(getPlacedLocation(), getParticle()).start();
+        new ParticleRunnable(location, getParticle()).start();
         new GeneratorOreGenRunnable(placeableAbstractGenerator).start();
     }
 

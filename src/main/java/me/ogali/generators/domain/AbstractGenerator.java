@@ -30,7 +30,9 @@ public abstract class AbstractGenerator implements Generatable {
 
     @Override
     public void generate() {
-        applicableOreList.forEach(placedGenOre -> placedGenOre.generate(Material.EMERALD_ORE));
+        synchronized (applicableOreList) {
+            applicableOreList.forEach(placedGenOre -> placedGenOre.generate(generatableMaterial));
+        }
     }
 
 }

@@ -9,13 +9,31 @@ public class Range {
     private final int x;
     private final int y;
     private final int z;
+    private final boolean includeCorners;
 
-    public boolean locationNotWithinRange(Location genLocation, Location placedGenOreLocation) {
+    public boolean locationWithinRange(Location genLocation, Location placedGenOreLocation) {
+        if (includeCorners) {
+            return locationWithinRangeIncludingCorners(genLocation, placedGenOreLocation);
+        }
+        return locationWithinRangeExcludingCorners(genLocation, placedGenOreLocation);
+    }
+
+    private boolean locationWithinRangeIncludingCorners(Location genLocation, Location placedGenOreLocation) {
         int differenceInXCoord = Math.abs(genLocation.getBlockX() - placedGenOreLocation.getBlockX());
         int differenceInYCoord = Math.abs(genLocation.getBlockY() - placedGenOreLocation.getBlockY());
         int differenceInZCoord = Math.abs(genLocation.getBlockZ() - placedGenOreLocation.getBlockZ());
 
-        return differenceInXCoord > x || differenceInYCoord > y || differenceInZCoord > z;
+        return differenceInXCoord <= x || differenceInYCoord <= y || differenceInZCoord <= z;
+    }
+
+    private boolean locationWithinRangeExcludingCorners(Location genLocation, Location placedGenOreLocation) {
+        int xDistance = Math.abs(genLocation.getBlockX() - placedGenOreLocation.getBlockX());
+        int zDistance = Math.abs(genLocation.getBlockZ() - placedGenOreLocation.getBlockZ());
+        int horizontalDistance = xDistance + zDistance;
+
+        boolean verticalCheck = Math.abs(genLocation.getBlockY() - placedGenOreLocation.getBlockY()) <= y;
+
+        return horizontalDistance <= x && verticalCheck;
     }
 
 }
