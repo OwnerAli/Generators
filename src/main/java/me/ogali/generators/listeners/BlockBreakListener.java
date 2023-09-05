@@ -26,8 +26,9 @@ public class BlockBreakListener implements Listener {
                             event.setCancelled(true);
                             event.setDropItems(false);
                             event.setExpToDrop(0);
-                            genOre.mine(event.getPlayer(), generator);
+                            genOre.mine(event.getPlayer(), generator, event);
                         }));
     }
+
 
 }

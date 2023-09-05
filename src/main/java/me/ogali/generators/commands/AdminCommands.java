@@ -5,6 +5,7 @@ import co.aikar.commands.annotation.*;
 import lombok.RequiredArgsConstructor;
 import me.ogali.generators.GeneratorsPlugin;
 import me.ogali.generators.domain.impl.impl.PlaceableBlockGenerator;
+import me.ogali.generators.items.InstaBreakerItem;
 import me.ogali.generators.menus.generators.GeneratorCreationMenu;
 import me.ogali.generators.menus.ores.GenOreCreationMenu;
 import me.ogali.generators.ore.domain.impl.PlacedGenOre;
@@ -23,14 +24,14 @@ public class AdminCommands extends BaseCommand {
     private final GeneratorsPlugin generatorsPlugin;
 
     @Subcommand("create")
-    @Syntax("<id> <gen speed in seconds> <generatable material> <x range> <y range> <z range> <include corners> <particle>")
+    @Syntax("<id> <gen speed in seconds> <generatable material> <x range> <y range> <z range> <include corners> <particle> <custom drops drop id>")
     public void onGeneratorCreate(Player player, String id, long genSpeedInSeconds, Material generatableMaterial, int xRange, int yRange, int zRange,
-                                  boolean includeCorners, Particle particle) {
+                                  boolean includeCorners, Particle particle, String customDropsDropId) {
         generatorsPlugin.getGeneratorRegistry()
                 .getGeneratorById(id)
                 .ifPresentOrElse(abstractGenerator -> Chat.tellFormatted(player, "&cGenerator with id: %s, already exists!", id),
                         () -> new GeneratorCreationMenu().show(player, new PlaceableBlockGenerator(id, genSpeedInSeconds,
-                                generatableMaterial, new Range(xRange, yRange, zRange, includeCorners), particle)));
+                                generatableMaterial, new Range(xRange, yRange, zRange, includeCorners), particle, customDropsDropId)));
     }
 
     @Subcommand("get")
@@ -49,7 +50,6 @@ public class AdminCommands extends BaseCommand {
 
     @Subcommand("genore create")
     @Syntax("<id> <gen amount multiplier>")
-    @CommandCompletion("@particleList")
     public void onGenOreCreate(Player player, String id, int genAmountMultiplier) {
         generatorsPlugin.getGenOreRegistry()
                 .getGenOreById(id)
@@ -68,6 +68,11 @@ public class AdminCommands extends BaseCommand {
                             Chat.tellFormatted(player, "&aAdded %s GenOre to your inventory!", id);
                         },
                         () -> Chat.tellFormatted(player, "&cInvalid GenOre id: %s", id));
+    }
+
+    @Subcommand("getInstaBreaker")
+    public void onGetInstaBreaker(Player player) {
+        player.getInventory().addItem(new InstaBreakerItem().getItem());
     }
 
 }

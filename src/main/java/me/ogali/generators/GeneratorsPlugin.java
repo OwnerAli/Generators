@@ -5,6 +5,9 @@ import co.aikar.commands.CommandCompletions;
 import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
 import me.ogali.generators.commands.AdminCommands;
+import me.ogali.generators.files.GenOresFile;
+import me.ogali.generators.files.GeneratorsFile;
+import me.ogali.generators.files.PlacedGeneratorsFile;
 import me.ogali.generators.listeners.BlockBreakListener;
 import me.ogali.generators.listeners.BlockPlaceListener;
 import me.ogali.generators.listeners.RightClickListener;
@@ -22,6 +25,9 @@ public final class GeneratorsPlugin extends JavaPlugin {
     private static GeneratorsPlugin instance;
     private GeneratorRegistry generatorRegistry;
     private GenOreRegistry genOreRegistry;
+    private GeneratorsFile generatorsFile;
+    private PlacedGeneratorsFile placedGeneratorsFile;
+    private GenOresFile genOresFile;
 
     @Getter
     private Random random;
@@ -31,12 +37,15 @@ public final class GeneratorsPlugin extends JavaPlugin {
         instance = this;
         random = new Random();
         initializeRegistries();
+        initializeFiles();
+        loadDataFromFiles();
         registerListeners();
         registerCommands();
     }
 
     @Override
     public void onDisable() {
+        saveDataToFiles();
     }
 
     private void registerListeners() {
@@ -51,6 +60,24 @@ public final class GeneratorsPlugin extends JavaPlugin {
         this.genOreRegistry = new GenOreRegistry();
     }
 
+    private void initializeFiles() {
+        this.generatorsFile = new GeneratorsFile();
+        this.placedGeneratorsFile = new PlacedGeneratorsFile();
+        this.genOresFile = new GenOresFile();
+    }
+
+    private void loadDataFromFiles() {
+        generatorsFile.loadFromFile();
+        genOresFile.loadFromFile();
+        placedGeneratorsFile.loadFromFile();
+    }
+
+    private void saveDataToFiles() {
+        generatorRegistry.getRegisteredGenerators().forEach(abstractGenerator -> generatorsFile.saveToFile(abstractGenerator));
+        generatorRegistry.getPlacedGenerators().forEach(placeableAbstractGenerator -> placedGeneratorsFile.saveToFile(placeableAbstractGenerator));
+        genOreRegistry.getRegisteredGenOres().forEach(abstractGenOre -> genOresFile.saveToFile(abstractGenOre));
+    }
+
     private void registerCommands() {
         PaperCommandManager paperCommandManager = new PaperCommandManager(this);
         paperCommandManager.registerCommand(new AdminCommands(this));
@@ -60,41 +87,8 @@ public final class GeneratorsPlugin extends JavaPlugin {
 
     private void registerCommandCompletions(PaperCommandManager paperCommandManager) {
         CommandCompletions<BukkitCommandCompletionContext> commandCompletions = paperCommandManager.getCommandCompletions();
-//        List<String> allParticleNames = Arrays.stream(Particle.values())
-//                .map(Enum::name)
-//                .collect(Collectors.toList());
-//
-//        // Add colored REDSTONE particle values
-//        allParticleNames.add("REDSTONE_RED");
-//        allParticleNames.add("REDSTONE_GREEN");
-//        allParticleNames.add("REDSTONE_BLUE");
-//        allParticleNames.add("REDSTONE_WHITE");
-//        allParticleNames.add("REDSTONE_YELLOW");
-//        allParticleNames.add("REDSTONE_PURPLE");
-//        allParticleNames.add("REDSTONE_ORANGE");
-//        allParticleNames.add("REDSTONE_GRAY");
-//        allParticleNames.add("REDSTONE_BLACK");
-//
-//        commandCompletions.registerCompletion("particleList", handler -> allParticleNames);
         commandCompletions.registerCompletion("generatorIdList", handler -> generatorRegistry.getRegisteredIdList());
         commandCompletions.registerCompletion("genOreIdList", handler -> genOreRegistry.getRegisteredIdList());
     }
-//
-//    private void registerCommandContexts(PaperCommandManager paperCommandManager) {
-//        CommandContexts<BukkitCommandExecutionContext> commandContexts = paperCommandManager.getCommandContexts();
-//        commandContexts.registerContext(Particle.class, context -> {
-//            String particleEnumName = context.popFirstArg();
-//
-//            if (particleEnumName.isEmpty() || particleEnumName.isBlank()) {
-//                return Particle.CAMPFIRE_COSY_SMOKE;
-//            }
-//
-//            try {
-//                return Particle.valueOf(particleEnumName);
-//            } catch (IllegalArgumentException ex) {
-//                throw new InvalidCommandArgument("Invalid particle value: " + particleEnumName);
-//            }
-//        });
-//    }
 
 }

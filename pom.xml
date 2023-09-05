@@ -99,5 +99,12 @@
             <artifactId>simplixstorage</artifactId>
             <version>3.2.6</version>
         </dependency>
+        <dependency>
+            <groupId>me.ogali.customdrops</groupId>
+            <artifactId>customdrops</artifactId>
+            <version>1.3.4-BETA</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/CustomDrops-1.3.4-BETA.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>

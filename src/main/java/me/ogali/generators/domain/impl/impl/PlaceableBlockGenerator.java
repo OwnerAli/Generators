@@ -3,6 +3,7 @@ package me.ogali.generators.domain.impl.impl;
 import lombok.Getter;
 import lombok.Setter;
 import me.ogali.generators.GeneratorsPlugin;
+import me.ogali.generators.domain.AbstractGenerator;
 import me.ogali.generators.domain.impl.PlaceableAbstractGenerator;
 import me.ogali.generators.range.Range;
 import me.ogali.generators.runnables.GeneratorOreGenRunnable;
@@ -23,13 +24,14 @@ public class PlaceableBlockGenerator extends PlaceableAbstractGenerator {
 
     private ItemStack itemStack;
 
-    public PlaceableBlockGenerator(String id, long genSpeedInSeconds, Material generatableMaterial, Range range, Particle particle) {
-        super(id, genSpeedInSeconds, generatableMaterial, range, particle);
+    public PlaceableBlockGenerator(String id, long genSpeedInSeconds, Material generatableMaterial, Range range, Particle particle, String customDropsDropId) {
+        super(id, genSpeedInSeconds, generatableMaterial, range, particle, customDropsDropId);
     }
 
-    public PlaceableBlockGenerator(PlaceableAbstractGenerator placeableGenerator) {
-        super(placeableGenerator.getId(), placeableGenerator.getGenSpeedInSeconds(), placeableGenerator.getGeneratableMaterial(),
-                placeableGenerator.getRange(), placeableGenerator.getParticle());
+    public PlaceableBlockGenerator(AbstractGenerator abstractGenerator, Location location) {
+        super(abstractGenerator.getId(), abstractGenerator.getGenSpeedInSeconds(), abstractGenerator.getGeneratableMaterial(),
+                abstractGenerator.getRange(), abstractGenerator.getParticle(), abstractGenerator.getCustomDropsDropId());
+        setPlacedLocation(location);
     }
 
     public ItemStack getItem() {
@@ -44,14 +46,17 @@ public class PlaceableBlockGenerator extends PlaceableAbstractGenerator {
     }
 
     @Override
-    public void place(Player player, Location location) {
-        PlaceableBlockGenerator placeableAbstractGenerator = new PlaceableBlockGenerator(this);
-        placeableAbstractGenerator.setPlacedLocation(location);
-        GeneratorsPlugin.getInstance().getGeneratorRegistry()
-                .registerPlaceableGenerator(placeableAbstractGenerator);
-        Chat.tell(player, "&aGenerator placed!");
-        new ParticleRunnable(location, getParticle()).start();
+    public void start(PlaceableAbstractGenerator placeableAbstractGenerator) {
+        new ParticleRunnable(placeableAbstractGenerator.getPlacedLocation(), getParticle()).start();
         new GeneratorOreGenRunnable(placeableAbstractGenerator).start();
+    }
+
+    @Override
+    public void place(Player player, Location location) {
+        PlaceableBlockGenerator placeableAbstractGenerator = new PlaceableBlockGenerator(this, location);
+        GeneratorsPlugin.getInstance().getGeneratorRegistry().registerPlaceableGenerator(placeableAbstractGenerator);
+        Chat.tell(player, "&aGenerator placed!");
+        start(placeableAbstractGenerator);
     }
 
 }

@@ -6,10 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GenOreRegistry {
@@ -37,6 +34,10 @@ public class GenOreRegistry {
             return getGenOreById(key.getKey().split("-")[1]);
         }
         return Optional.empty();
+    }
+
+    public Collection<AbstractGenOre> getRegisteredGenOres() {
+        return genOreMap.values();
     }
 
     public List<String> getRegisteredIdList() {

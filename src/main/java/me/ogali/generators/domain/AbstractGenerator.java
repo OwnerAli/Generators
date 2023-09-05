@@ -6,8 +6,8 @@ import me.ogali.generators.range.Range;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Getter
 public abstract class AbstractGenerator implements Generatable {
@@ -17,22 +17,22 @@ public abstract class AbstractGenerator implements Generatable {
     private final Material generatableMaterial;
     private final Range range;
     private final Particle particle;
+    private final String customDropsDropId;
     private final List<PlacedGenOre> applicableOreList;
 
-    public AbstractGenerator(String id, long genSpeedInSeconds, Material generatableMaterial, Range range, Particle particle) {
+    public AbstractGenerator(String id, long genSpeedInSeconds, Material generatableMaterial, Range range, Particle particle, String customDropsDropId) {
         this.id = id;
         this.generatableMaterial = generatableMaterial;
         this.particle = particle;
         this.range = range;
         this.genSpeedInSeconds = genSpeedInSeconds;
-        this.applicableOreList = new ArrayList<>();
+        this.customDropsDropId = customDropsDropId;
+        this.applicableOreList = new CopyOnWriteArrayList<>();
     }
 
     @Override
     public void generate() {
-        synchronized (applicableOreList) {
-            applicableOreList.forEach(placedGenOre -> placedGenOre.generate(generatableMaterial));
-        }
+        applicableOreList.forEach(placedGenOre -> placedGenOre.generate(generatableMaterial, this));
     }
 
 }

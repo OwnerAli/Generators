@@ -1,5 +1,6 @@
 package me.ogali.generators.registries;
 
+import lombok.Getter;
 import me.ogali.generators.domain.AbstractGenerator;
 import me.ogali.generators.domain.impl.PlaceableAbstractGenerator;
 import org.bukkit.Location;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 public class GeneratorRegistry {
 
     private final Map<String, AbstractGenerator> generatorMap = new HashMap<>();
+    @Getter
     private final Map<Location, PlaceableAbstractGenerator> placedGeneratorsMap = new HashMap<>();
 
     public void registerGenerator(AbstractGenerator abstractGenerator) {
@@ -53,11 +55,20 @@ public class GeneratorRegistry {
         return Optional.empty();
     }
 
+    public Collection<AbstractGenerator> getRegisteredGenerators() {
+        return generatorMap.values();
+    }
+
+    public Collection<PlaceableAbstractGenerator> getPlacedGenerators() {
+        return placedGeneratorsMap.values();
+    }
+
     public List<String> getRegisteredIdList() {
         return generatorMap.values()
                 .stream()
                 .map(AbstractGenerator::getId)
                 .collect(Collectors.toList());
+
     }
 
 }
