@@ -6,6 +6,7 @@ import me.ogali.generators.range.Range;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -32,7 +33,7 @@ public abstract class AbstractGenerator implements Generatable {
 
     @Override
     public void generate() {
-        applicableOreList.forEach(placedGenOre -> placedGenOre.generate(generatableMaterial, this));
+        Collections.synchronizedList(applicableOreList).forEach(placedGenOre -> placedGenOre.generate(generatableMaterial, this));
     }
 
 }

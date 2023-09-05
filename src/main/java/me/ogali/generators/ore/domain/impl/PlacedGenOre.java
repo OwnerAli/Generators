@@ -14,6 +14,8 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Collections;
+
 @Getter
 public class PlacedGenOre extends AbstractGenOre {
 
@@ -33,7 +35,8 @@ public class PlacedGenOre extends AbstractGenOre {
 
     @Override
     public void place(Player player, AbstractGenerator generator, Location location) {
-        generator.getApplicableOreList().add(new PlacedGenOre(this, location));
+        Collections.synchronizedList(generator.getApplicableOreList())
+                .add(new PlacedGenOre(this, location));
     }
 
     @Override
@@ -45,6 +48,10 @@ public class PlacedGenOre extends AbstractGenOre {
 
     @Override
     public void generate(Material material, AbstractGenerator abstractGenerator) {
+        if (location.getBlock().getType().equals(Material.AIR)) {
+            abstractGenerator.getApplicableOreList().remove(this);
+            return;
+        }
         incrementAndUpdateGenOre(material);
         location.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, location.clone().add(0, 1.5, 0), 10);
     }
@@ -98,7 +105,8 @@ public class PlacedGenOre extends AbstractGenOre {
     private void removeOreFromGenAndGive(Player player, AbstractGenerator abstractGenerator) {
         location.getBlock().setType(Material.AIR);
         player.getInventory().addItem(getItem());
-        abstractGenerator.getApplicableOreList().remove(this);
+        Collections.synchronizedList(abstractGenerator.getApplicableOreList())
+                        .remove(this);
     }
 
     private void dropGenDrops(Event event, AbstractGenerator abstractGenerator) {
